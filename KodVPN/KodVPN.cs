@@ -60,26 +60,23 @@ namespace KodVPN
 
             MessageBox.Show("Connected.");
             button1.Text = "Disconnect";
-            string protectedip = new WebClient().DownloadString("http://icanhazip.com");
-            label3.Text = "IP: " + protectedip;
 
         }
 
         private void disconnect()
         {
-            var process = new ProcessStartInfo();
-            process.UseShellExecute = true;
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Verb = "runas";
+            startInfo.Arguments = "/C Taskkill /F /IM openvpn.exe";
+            process.StartInfo = startInfo;
+            process.Start();
 
-            process.WorkingDirectory = @"C:\Windows\System32";
 
-            process.FileName = @"C:\Windows\System32\cmd.exe";
-            process.Verb = "runas";
-            process.Arguments = "/c Taskkill /F /IM openvpn.exe";
-            process.WindowStyle = ProcessWindowStyle.Hidden;
-            Process.Start(process);
             MessageBox.Show("Disconnected.");
             button1.Text = "Connect";
-            label3.Text = "IP: Disconnected";
         }
 
         private void notifyIcon_Click(object sender, EventArgs e)
